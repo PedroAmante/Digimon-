@@ -1,4 +1,3 @@
-// src/app/page.tsx
 "use client";
 
 import React, { useState, useContext } from "react";
@@ -11,7 +10,6 @@ import { buscarDigimonPorNome } from "../services/api";
 import { DigimonContext, ThemeContext } from "../contexts";
 import { Digimon } from "../types/types";
 
-// Animações
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -35,7 +33,6 @@ const float = keyframes`
   }
 `;
 
-// Styled Components
 const PageContainer = styled.div`
   min-height: 100vh;
   display: flex;
@@ -97,7 +94,6 @@ const LeftSection = styled.div`
   }
 `;
 
-// Character Image - Posicionamento específico conforme coordenadas exatas
 const CharacterImage = styled.div`
   position: absolute;
   width: 647px;
@@ -114,7 +110,6 @@ const CharacterImage = styled.div`
   }
 `;
 
-// LogoContainer ajustado com flexbox para alinhar verticalmente
 const LogoContainer = styled.div`
   display: flex;
   align-items: center; /* Alinha verticalmente no centro */
@@ -122,14 +117,12 @@ const LogoContainer = styled.div`
   position: relative;
 `;
 
-// Logo principal ajustado
 const MainLogo = styled.div`
   position: relative;
   display: flex;
   align-items: center;
 `;
 
-// Logos separados para FPR e DIGIMON com posicionamento refinado
 const FPRLogo = styled.div`
   position: absolute;
   top: 126px;
@@ -142,7 +135,6 @@ const DigimonLogo = styled.div`
   left: 151px; /* Ajustado para ficar mais próximo do logo */
 `;
 
-// Textos - Cor específica para cada tema
 const WelcomeText = styled.p`
   color: ${({ theme }) => {
     if (theme.currentTheme === "default") return "#f46d1b";
@@ -151,7 +143,7 @@ const WelcomeText = styled.p`
     if (theme.currentTheme === "luz") return "#FDF753";
     if (theme.currentTheme === "amor") return "#FDF753";
     if (theme.currentTheme === "sinceridade") return "#FDF753";
-    return "#F8A12E"; // Cor padrão para outros temas
+    return "#F8A12E";
   }};
   font-family: "Poppins", sans-serif;
   font-weight: 600;
@@ -224,7 +216,6 @@ const SearchForm = styled.form`
   }
 `;
 
-// Barra de pesquisa atualizada para tema default com borda verde
 const SearchInputContainer = styled.div`
   display: flex;
   align-items: center;
@@ -255,7 +246,6 @@ const SearchInput = styled.input`
   background: transparent;
 `;
 
-// Botão de pesquisa atualizado para o tema default com ícone verde
 const SearchButton = styled.button`
   background: none;
   border: none;
@@ -279,7 +269,6 @@ const SearchButton = styled.button`
   }
 `;
 
-// Ajuste no ButtonsContainer para alinhar com a barra de pesquisa
 const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between; // Para alinhar às extremidades
@@ -296,7 +285,6 @@ const ButtonsContainer = styled.div`
   }
 `;
 
-// Botão "ESCOLHA SEU DIGIMON" atualizado para laranja no tema default
 const PrimaryButton = styled.button`
   background-color: ${({ theme }) => {
     if (theme.currentTheme === "default") return "#F46D1B";
@@ -305,7 +293,7 @@ const PrimaryButton = styled.button`
     if (theme.currentTheme === "luz") return "#FDF753";
     if (theme.currentTheme === "amor") return "#FDF753";
     if (theme.currentTheme === "sinceridade") return "#FDF753";
-    return "#f8a12e"; // Cor padrão para outros temas
+    return "#f8a12e";
   }};
   color: white;
   border-radius: 30px;
@@ -338,7 +326,6 @@ const PrimaryButton = styled.button`
   }
 `;
 
-// Botão "VER TODOS" atualizado para verde no tema default
 const SecondaryButton = styled(Link)`
   display: inline-flex;
   align-items: center;
@@ -403,7 +390,6 @@ const UserCircle = styled.div`
   }
 `;
 
-// Modal
 const fadeInModal = keyframes`
   from {
     opacity: 0;
@@ -505,14 +491,12 @@ const ModalButton = styled.button`
   }
 `;
 
-// Interface para o resultado da busca
 interface DigimonSearchResult {
   name: string;
   img: string;
   level: string;
 }
 
-// Componente Home
 const Home: React.FC = () => {
   const [termoPesquisa, setTermoPesquisa] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -566,7 +550,6 @@ const Home: React.FC = () => {
     }
   };
 
-  // Determina a cor do ícone de pesquisa - atualizada para o tema default
   const getSearchIconColor = () => {
     if (currentTheme === "default") return "#34AC40";
     if (currentTheme === "sabedoria") return "#A50000";
@@ -579,7 +562,6 @@ const Home: React.FC = () => {
         <ThemeSwitcher />
       </Header>
 
-      {/* Círculo do Digimon selecionado */}
       <UserCircle>
         {selectedDigimon ? (
           <Image
@@ -600,7 +582,6 @@ const Home: React.FC = () => {
         )}
       </UserCircle>
 
-      {/* Imagem do personagem - Atualizada para o tema default */}
       <CharacterImage>
         <Image
           src="/assets/images/Personagem.png"
@@ -615,9 +596,7 @@ const Home: React.FC = () => {
       </CharacterImage>
 
       <ContentContainer>
-        {/* Lado Esquerdo - Textos e busca */}
         <LeftSection>
-          {/* Logo - Atualizado para tema default */}
           <LogoContainer>
             {currentTheme !== "default" ? (
               <>
@@ -682,16 +661,13 @@ const Home: React.FC = () => {
             )}
           </LogoContainer>
 
-          {/* Bem vindo */}
           <WelcomeText>Bem vindo ao FPR DIGIMON</WelcomeText>
 
-          {/* Título Principal */}
           <MainTitle>
             Escolha o <br />
             seu Digimon
           </MainTitle>
 
-          {/* Texto Descritivo */}
           <DescriptionText>
             O Universo Digimon é um mundo digital onde vivem os Digimons,
             criaturas virtuais que formam laços com parceiros humanos. Juntos,
@@ -699,7 +675,6 @@ const Home: React.FC = () => {
             quanto o mundo real.
           </DescriptionText>
 
-          {/* Barra de Pesquisa (sem o label PESQUISAR) */}
           <SearchForm onSubmit={handlePesquisa}>
             <SearchInputContainer>
               <SearchInput
@@ -723,7 +698,6 @@ const Home: React.FC = () => {
             </SearchInputContainer>
           </SearchForm>
 
-          {/* Botões com tamanhos específicos */}
           <ButtonsContainer>
             <PrimaryButton onClick={handlePesquisa} disabled={isSearching}>
               {isSearching ? "BUSCANDO..." : "ESCOLHA SEU DIGIMON"}
@@ -734,7 +708,6 @@ const Home: React.FC = () => {
         </LeftSection>
       </ContentContainer>
 
-      {/* Modal de Confirmação */}
       {showConfirmModal && searchResult && (
         <ModalOverlay onClick={() => setShowConfirmModal(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>

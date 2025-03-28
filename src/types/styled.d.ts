@@ -15,11 +15,9 @@ declare module "styled-components" {
       primary: string;
     };
     breakpoints: {
-      small: string;
       mobile: string;
       tablet: string;
       desktop: string;
-      large: string;
     };
     currentTheme: string;
     images: {
@@ -35,22 +33,10 @@ declare module "styled-components" {
     digimonCircle: {
       background: string;
     };
-    spacing: {
-      xs: string;
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
-      xxl: string;
-    };
-    fontSizes: {
-      xs: string;
-      sm: string;
-      md: string;
-      lg: string;
-      xl: string;
-      xxl: string;
-      xxxl: string;
+    buttons: {
+      searchIcon: string;
+      verTodos: string;
+      escolhaDigimon?: string;
     };
   }
 }

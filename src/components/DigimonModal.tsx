@@ -1,4 +1,3 @@
-// src/components/DigimonModal.tsx
 "use client";
 
 import React, { useContext } from "react";

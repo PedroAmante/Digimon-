@@ -1,12 +1,11 @@
-// src/services/api.ts
 import { Digimon } from "../types/types";
 
 const API_BASE_URL = "https://digimon-api.vercel.app/api/digimon";
 
 /**
- * Busca Digimon por nome
- * @param {string} nome - Nome do Digimon a ser buscado
- * @returns {Promise<Digimon[]>} - Lista de Digimons encontrados
+ *
+ * @param {string} nome
+ * @returns {Promise<Digimon[]>}
  */
 export const buscarDigimonPorNome = async (
   nome: string
@@ -27,8 +26,8 @@ export const buscarDigimonPorNome = async (
 };
 
 /**
- * Busca todos os Digimons
- * @returns {Promise<Digimon[]>} - Lista de todos os Digimons
+ 
+ * @returns {Promise<Digimon[]>} 
  */
 export const buscarTodosDigimons = async (): Promise<Digimon[]> => {
   try {
@@ -48,8 +47,8 @@ export const buscarTodosDigimons = async (): Promise<Digimon[]> => {
 
 /**
  * Busca Digimons por nível
- * @param {string} level - Nível do Digimon (In Training, Rookie, Champion, etc)
- * @returns {Promise<Digimon[]>} - Lista de Digimons do nível especificado
+ * @param {string} level
+ * @returns {Promise<Digimon[]>}
  */
 export const buscarDigimonsPorNivel = async (
   level: string

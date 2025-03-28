@@ -1,13 +1,11 @@
-// src/components/ThemeSwitcher.tsx
 "use client";
 
 import React, { useContext } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { ThemeContext } from "../contexts";
-import { themes, ThemeType } from "../styles/theme";
+import { ThemeType } from "../styles/theme";
 
-// Título do seletor com posicionamento absoluto e cor atualizada para o tema default
 const ThemeLabel = styled.span`
   position: absolute;
   width: 107px;
@@ -33,7 +31,6 @@ const ThemeLabel = styled.span`
   }
 `;
 
-// Container para os círculos - Atualizado para layout horizontal
 const ThemeCirclesContainer = styled.div`
   display: flex;
   position: absolute;
@@ -56,7 +53,6 @@ const ThemeCirclesContainer = styled.div`
   }
 `;
 
-// Círculo de tema com label abaixo
 const ThemeCircleWrapper = styled.div<{
   $left: number;
 }>`
@@ -73,7 +69,6 @@ const ThemeCircleWrapper = styled.div<{
   }
 `;
 
-// Botão de tema (círculo) - Quando selecionado fica branco
 const ThemeCircle = styled.button<{
   $themeColor: string;
   $isActive: boolean;
@@ -105,7 +100,6 @@ const ThemeCircle = styled.button<{
   }
 `;
 
-// Container para a imagem dentro do círculo
 const ThemeIconContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -113,7 +107,6 @@ const ThemeIconContainer = styled.div`
   margin-bottom: 4px;
 `;
 
-// Texto do tema dentro do círculo com cores específicas quando ativo
 const ThemeText = styled.span<{
   $isActive: boolean;
   $themeType: string;
@@ -123,7 +116,6 @@ const ThemeText = styled.span<{
   font-size: 6px;
   color: ${(props) => {
     if (props.$isActive) {
-      // Cores específicas para cada tema quando ativo
       if (props.$themeType === "esperanca") return "#209441";
       if (props.$themeType === "sabedoria") return "#CB1E31";
       if (props.$themeType === "confianca") return "#7D4D8B";
@@ -134,7 +126,7 @@ const ThemeText = styled.span<{
       if (props.$themeType === "sinceridade") return "#F282B0";
       return "#FFFFFF";
     }
-    return "#FFFFFF"; // Branco quando não ativo
+    return "#FFFFFF";
   }};
   text-align: center;
   text-transform: uppercase;
@@ -142,10 +134,8 @@ const ThemeText = styled.span<{
     props.$isActive ? "0 0 3px rgba(0,0,0,0.5)" : "none"};
 `;
 
-// Função para determinar qual imagem mostrar baseado no tema e estado ativo
-const getThemeImage = (themeType, isActive) => {
+const getThemeImage = (themeType: string, isActive: boolean): string => {
   if (isActive) {
-    // Quando o tema está ativo, mostrar a imagem colorida para o tema correspondente
     if (themeType === "esperanca")
       return "/assets/images/esperanca-colorido.png";
     if (themeType === "sabedoria")
@@ -160,7 +150,6 @@ const getThemeImage = (themeType, isActive) => {
       return "/assets/images/SINCERIDADE_colorido.png";
   }
 
-  // Para temas não ativos, usar sempre a imagem branca
   if (themeType === "esperanca") return "/assets/images/esperanca_branco.png";
   if (themeType === "sabedoria") return "/assets/images/sabedoria_branco.png";
   if (themeType === "confianca") return "/assets/images/confianca_branco.png";
@@ -170,6 +159,9 @@ const getThemeImage = (themeType, isActive) => {
   if (themeType === "amor") return "/assets/images/AMOR_BRANCO 1.png";
   if (themeType === "sinceridade")
     return "/assets/images/SINCERIDADE_BRANCO 1.png";
+
+  // Fallback para evitar o retorno de undefined
+  return "/assets/images/default.png";
 };
 
 // Configuração dos temas com imagens
@@ -253,9 +245,7 @@ const ThemeSwitcher: React.FC = () => {
   const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
 
   const handleThemeChange = (themeType: ThemeType) => {
-    // Não permitir selecionar o tema default explicitamente
     if (themeType !== "default") {
-      // Salva o tema escolhido
       setCurrentTheme(themeType);
     }
   };

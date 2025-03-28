@@ -1,4 +1,3 @@
-// src/lib/registry.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -10,7 +9,6 @@ export default function StyledComponentsRegistry({
 }: {
   children: React.ReactNode;
 }) {
-  // Only create stylesheet once with lazy initial state
   const [styledComponentsStyleSheet] = useState(() => new ServerStyleSheet());
 
   useServerInsertedHTML(() => {

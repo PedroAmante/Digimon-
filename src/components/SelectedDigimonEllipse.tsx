@@ -5,7 +5,6 @@ import styled from "styled-components";
 import Image from "next/image";
 import { DigimonContext } from "../contexts";
 
-// Ellipse estilizada para mostrar o Digimon selecionado
 const DigimonEllipse = styled.div`
   position: absolute;
   width: 78px;

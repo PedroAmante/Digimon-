@@ -1,12 +1,11 @@
-// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   compiler: {
-    styledComponents: true, // Habilita o suporte nativo ao Styled Components
+    styledComponents: true,
   },
   images: {
-    domains: ["digimon-api.vercel.app"], // Permite carregar imagens do domínio da API
+    domains: ["digimon-api.vercel.app"],
     remotePatterns: [
       {
         protocol: "https",

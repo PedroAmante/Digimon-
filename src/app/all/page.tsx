@@ -5,17 +5,13 @@ import styled, { keyframes, createGlobalStyle } from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Home as HomeIcon } from "lucide-react";
-import {
-  buscarTodosDigimons,
-  buscarDigimonsPorNivel,
-} from "../../services/api";
+import { buscarTodosDigimons } from "../../services/api";
 import { DigimonContext, ThemeContext } from "../../contexts";
 import { Digimon } from "../../types/types";
 import { useRouter } from "next/navigation";
 import ThemeSwitcher from "../../components/ThemeSwitcher";
 import SelectedDigimonEllipse from "../../components/SelectedDigimonEllipse";
 
-// Estilos globais para remover a barra de rolagem e escurecer o fundo
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -36,7 +32,6 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-// Overlay escuro para temas personalizados
 const DarkOverlay = styled.div<{ $isCustomTheme: boolean }>`
   position: fixed;
   top: 0;
@@ -49,7 +44,6 @@ const DarkOverlay = styled.div<{ $isCustomTheme: boolean }>`
   display: ${(props) => (props.$isCustomTheme ? "block" : "none")};
 `;
 
-// Animações
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -61,7 +55,6 @@ const fadeIn = keyframes`
   }
 `;
 
-// Styled Components - Atualizado para suportar imagens de fundo do tema
 const PageContainer = styled.div`
   min-height: 100vh;
   display: flex;
@@ -99,7 +92,6 @@ const Header = styled.header`
   }
 `;
 
-// NOVOS COMPONENTES PARA LOGOS COM POSICIONAMENTO EXATO
 const LogoWhite = styled.div`
   position: absolute;
   width: 64px;
@@ -127,7 +119,6 @@ const LogoWhite = styled.div`
   }
 `;
 
-// Logo do DIGIMON-branco adicionado novamente com posicionamento exato
 const DigimonLogoWhite = styled.div`
   position: absolute;
   width: 103.49708557128906px;
@@ -187,49 +178,6 @@ const LogoContainer = styled.div`
   }
 `;
 
-// DigimonEllipse atualizado para ficar centralizado mais à direita
-const DigimonEllipse = styled.div`
-  position: absolute;
-  width: 78px;
-  height: 78px;
-  top: 39px;
-  right: 50%;
-  transform: translateX(150px);
-  background: ${({ theme }) => theme.digimonCircle?.background || "#FFFFFF"};
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  overflow: hidden;
-  margin: 0;
-
-  &:hover {
-    transform: translateX(150px) scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  @media (max-width: 1366px) {
-    right: 45%;
-  }
-
-  @media (max-width: 768px) {
-    position: relative;
-    right: auto;
-    transform: none;
-    margin: 20px auto;
-    width: 60px;
-    height: 60px;
-
-    &:hover {
-      transform: scale(1.05);
-    }
-  }
-`;
-
-// SearchContainer removido, vamos posicionar cada input individualmente
 const SearchInputContainer = styled.div`
   position: absolute;
   width: 240px;
@@ -346,7 +294,6 @@ const ContentContainer = styled.div`
   }
 `;
 
-// Digimon Grid com posicionamento absoluto removido - os cards serão posicionados individualmente
 const DigimonGrid = styled.div`
   position: relative;
   width: 100%;
@@ -364,8 +311,6 @@ const DigimonGrid = styled.div`
   }
 `;
 
-// Card de Digimon com posicionamento absoluto para cada card - moved up 170px
-// Agora com background transparente e sem sombra apenas para o tema default
 const DigimonCard = styled.div<{ $position: number; $row: number }>`
   position: absolute;
   width: 302px;
@@ -438,7 +383,6 @@ const DigimonCard = styled.div<{ $position: number; $row: number }>`
   }
 `;
 
-// CardImage com fundo semi-transparente apenas para o tema default
 const CardImage = styled.div`
   position: relative;
   width: 80px;
@@ -454,7 +398,6 @@ const CardImage = styled.div`
   border-radius: 8px 0 0 8px;
 `;
 
-// CardContent com fundo transparente para todos os temas
 const CardContent = styled.div`
   padding: 10px;
   margin: 0;
@@ -468,7 +411,6 @@ const CardContent = styled.div`
   border-radius: 0 8px 8px 0;
 `;
 
-// Textos ajustados para ter cor preta no tema default e branca nos outros temas
 const CardTitle = styled.p`
   font-weight: normal;
   margin: 0 0 4px 0;
@@ -487,7 +429,6 @@ const CardSubtitle = styled.p`
   font-weight: normal;
 `;
 
-// Botões de paginação posicionados exatamente como solicitado
 const PaginationContainer = styled.div`
   /* Container removido, cada botão tem seu próprio posicionamento absoluto */
   display: contents;
@@ -643,7 +584,6 @@ const FloatingHomeButton = styled(Link)`
   }
 `;
 
-// NoResultsMessage com cor do tema
 const NoResultsMessage = styled.div`
   text-align: center;
   padding: 0;
@@ -654,7 +594,6 @@ const NoResultsMessage = styled.div`
   animation: ${fadeIn} 0.5s ease;
 `;
 
-// Modal de confirmação
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -752,9 +691,8 @@ const PrimaryModalButton = styled.button`
   }
 `;
 
-// Main Component
 const AllDigimonPage: React.FC = () => {
-  const { selectedDigimon, setSelectedDigimon } = useContext(DigimonContext);
+  const { setSelectedDigimon } = useContext(DigimonContext);
   const { currentTheme } = useContext(ThemeContext);
   const [digimons, setDigimons] = useState<Digimon[]>([]);
   const [filteredDigimons, setFilteredDigimons] = useState<Digimon[]>([]);
@@ -772,7 +710,6 @@ const AllDigimonPage: React.FC = () => {
   const isCustomTheme = currentTheme !== "default";
   const ITEMS_PER_PAGE = isMobile ? 8 : 12;
 
-  // Função auxiliar para calcular a posição de cada card
   const getCardPosition = (
     index: number
   ): { position: number; row: number } => {
@@ -781,7 +718,6 @@ const AllDigimonPage: React.FC = () => {
     return { position, row };
   };
 
-  // Detecta se é mobile
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -795,7 +731,6 @@ const AllDigimonPage: React.FC = () => {
     };
   }, []);
 
-  // Carrega todos os digimons uma vez
   useEffect(() => {
     const loadAllDigimons = async () => {
       try {
@@ -814,7 +749,6 @@ const AllDigimonPage: React.FC = () => {
     loadAllDigimons();
   }, []);
 
-  // Filtra pelo nível selecionado usando dados locais
   useEffect(() => {
     if (allDigimons.length > 0) {
       setLoading(true);
@@ -832,7 +766,6 @@ const AllDigimonPage: React.FC = () => {
     }
   }, [levelFilter, allDigimons]);
 
-  // Filtra por texto digitado usando dados locais
   useEffect(() => {
     if (digimons.length > 0) {
       if (searchTerm) {
@@ -847,7 +780,6 @@ const AllDigimonPage: React.FC = () => {
     }
   }, [searchTerm, digimons]);
 
-  // Pagination logic
   const totalPages = Math.ceil(filteredDigimons.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -869,7 +801,7 @@ const AllDigimonPage: React.FC = () => {
   const handleConfirm = () => {
     if (selectedLocalDigimon) {
       setSelectedDigimon(selectedLocalDigimon);
-      // Navegar para a página inicial após a seleção para ver o Digimon na Ellipse
+
       router.push("/");
     }
     setModalOpen(false);
@@ -885,7 +817,6 @@ const AllDigimonPage: React.FC = () => {
       <DarkOverlay $isCustomTheme={isCustomTheme} />
       <PageContainer>
         <Header>
-          {/* Container para o tema padrão */}
           <LogoContainer>
             <Link href="/">
               <Image
@@ -898,7 +829,6 @@ const AllDigimonPage: React.FC = () => {
             </Link>
           </LogoContainer>
 
-          {/* Logos para temas não-padrão com posicionamento exato */}
           <LogoWhite>
             <Link href="/">
               <Image
@@ -931,11 +861,9 @@ const AllDigimonPage: React.FC = () => {
             />
           </DigimonLogoWhite>
 
-          {/* ThemeSwitcher diretamente no header */}
           <ThemeSwitcher />
         </Header>
 
-        {/* Elipse do Digimon usando o componente global */}
         <SelectedDigimonEllipse />
 
         <SearchInputContainer>
@@ -974,7 +902,6 @@ const AllDigimonPage: React.FC = () => {
           ) : (
             <>
               <DigimonGrid>
-                {/* Digimon Cards com posicionamento absoluto */}
                 {currentDigimons.map((digimon, index) => {
                   const { position, row } = getCardPosition(index);
                   return (
@@ -1020,7 +947,6 @@ const AllDigimonPage: React.FC = () => {
           )}
         </ContentContainer>
 
-        {/* Modal de confirmação */}
         {modalOpen && selectedLocalDigimon && (
           <ModalOverlay>
             <ModalContent>
@@ -1038,7 +964,6 @@ const AllDigimonPage: React.FC = () => {
           </ModalOverlay>
         )}
 
-        {/* Botão flutuante de Home para mobile */}
         <FloatingHomeButton href="/">
           <HomeIcon size={24} />
         </FloatingHomeButton>
