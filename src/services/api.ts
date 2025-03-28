@@ -1,67 +1,70 @@
 // src/services/api.ts
 import { Digimon } from "../types/types";
 
-// Use a variável de ambiente ou fallback para a URL base
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://digimon-api.vercel.app/api/digimon";
+const API_BASE_URL = "https://digimon-api.vercel.app/api/digimon";
 
 /**
- * Busca todos os Digimon disponíveis na API
+ * Busca Digimon por nome
+ * @param {string} nome - Nome do Digimon a ser buscado
+ * @returns {Promise<Digimon[]>} - Lista de Digimons encontrados
  */
-export const fetchAllDigimon = async (): Promise<Digimon[]> => {
+export const buscarDigimonPorNome = async (
+  nome: string
+): Promise<Digimon[]> => {
   try {
-    const response = await fetch(API_BASE_URL);
+    const response = await fetch(`${API_BASE_URL}/name/${nome}`);
 
     if (!response.ok) {
-      throw new Error(`Erro na API: ${response.status}`);
+      throw new Error(`Erro ao buscar Digimon: ${response.status}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("Erro ao buscar todos os Digimon:", error);
+    console.error("Erro na API:", error);
     throw error;
   }
 };
 
 /**
- * Busca um Digimon específico pelo nome
- * @param name Nome do Digimon a ser buscado
+ * Busca todos os Digimons
+ * @returns {Promise<Digimon[]>} - Lista de todos os Digimons
  */
-export const buscarDigimonPorNome = async (
-  name: string
-): Promise<Digimon[]> => {
+export const buscarTodosDigimons = async (): Promise<Digimon[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/name/${name}`);
+    const response = await fetch(`${API_BASE_URL}`);
 
     if (!response.ok) {
-      throw new Error(`Erro na API: ${response.status}`);
+      throw new Error(`Erro ao buscar todos os Digimons: ${response.status}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error(`Erro ao buscar Digimon por nome (${name}):`, error);
+    console.error("Erro na API:", error);
     throw error;
   }
 };
 
 /**
  * Busca Digimons por nível
- * @param level Nível dos Digimon a serem buscados
+ * @param {string} level - Nível do Digimon (In Training, Rookie, Champion, etc)
+ * @returns {Promise<Digimon[]>} - Lista de Digimons do nível especificado
  */
-export const buscarDigimonPorNivel = async (
+export const buscarDigimonsPorNivel = async (
   level: string
 ): Promise<Digimon[]> => {
   try {
     const response = await fetch(`${API_BASE_URL}/level/${level}`);
 
     if (!response.ok) {
-      throw new Error(`Erro na API: ${response.status}`);
+      throw new Error(`Erro ao buscar Digimons por nível: ${response.status}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error(`Erro ao buscar Digimon por nível (${level}):`, error);
+    console.error("Erro na API:", error);
     throw error;
   }
 };

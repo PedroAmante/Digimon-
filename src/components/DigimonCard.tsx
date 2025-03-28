@@ -1,4 +1,3 @@
-// src/components/DigimonCard.tsx
 "use client";
 
 import React, { useContext } from "react";
@@ -12,16 +11,17 @@ interface DigimonCardProps {
 }
 
 const Card = styled.div`
-  background-color: white;
+  background-color: transparent; // Alterado de white para transparent
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: none; // Removida a sombra padrão
   transition: transform 0.2s ease;
   cursor: pointer;
   height: 100%;
 
   &:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); // Adicionada sombra apenas no hover
   }
 `;
 
@@ -29,7 +29,12 @@ const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 120px;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); // Semi-transparente em vez de sólido
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,17 +42,25 @@ const ImageWrapper = styled.div`
 
 const CardContent = styled.div`
   padding: 12px;
+  background-color: transparent; // Garantindo que o conteúdo seja transparente
 `;
 
 const DigimonName = styled.p`
   margin: 0 0 4px 0;
   font-size: 14px;
   font-weight: 500;
+  color: ${({ theme }) =>
+    theme.currentTheme === "default"
+      ? "#333333"
+      : "white"}; // Ajuste da cor do texto conforme o tema
 `;
 
 const DigimonLevel = styled.p`
   font-size: 14px;
-  color: #666;
+  color: ${({ theme }) =>
+    theme.currentTheme === "default"
+      ? "#666"
+      : "rgba(255, 255, 255, 0.8)"}; // Ajuste da cor secundária conforme o tema
   margin: 0;
 `;
 

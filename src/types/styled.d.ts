@@ -1,17 +1,5 @@
-// src/types/styled.d.ts
+// src/styles/styled.d.ts
 import "styled-components";
-
-// Definição dos tipos de tema
-export type ThemeType =
-  | "default"
-  | "esperanca"
-  | "sabedoria"
-  | "confianca"
-  | "coragem"
-  | "amizade"
-  | "luz"
-  | "amor"
-  | "sinceridade";
 
 declare module "styled-components" {
   export interface DefaultTheme {
@@ -27,23 +15,42 @@ declare module "styled-components" {
       primary: string;
     };
     breakpoints: {
+      small: string;
       mobile: string;
       tablet: string;
       desktop: string;
+      large: string;
     };
-    currentTheme: ThemeType;
-    images?: {
+    currentTheme: string;
+    images: {
       background?: string;
-      logo?: string;
+      logo: string;
       fprLogo?: string;
       digimonLogo?: string;
     };
-    textColors?: {
+    textColors: {
       primary: string;
       secondary: string;
     };
-    digimonCircle?: {
+    digimonCircle: {
       background: string;
+    };
+    spacing: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      xxl: string;
+    };
+    fontSizes: {
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      xxl: string;
+      xxxl: string;
     };
   }
 }

@@ -1,4 +1,3 @@
-// src/components/SelectedDigimonEllipse.tsx
 "use client";
 
 import React, { useContext } from "react";
@@ -12,7 +11,7 @@ const DigimonEllipse = styled.div`
   width: 78px;
   height: 78px;
   top: 39px;
-  left: 650px;
+  left: 650px; /* Posicionado à esquerda da barra de pesquisa (que está em left: 769px) */
   background: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -21,6 +20,19 @@ const DigimonEllipse = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 20;
   overflow: hidden;
+
+  @media (max-width: 1366px) {
+    left: 400px;
+  }
+
+  @media (max-width: 768px) {
+    position: relative;
+    left: auto;
+    top: auto;
+    margin: 20px auto;
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 const SelectedDigimonEllipse: React.FC = () => {

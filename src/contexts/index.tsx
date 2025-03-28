@@ -69,17 +69,26 @@ export const AppProvider: React.FC<ProvidersProps> = ({ children }) => {
   // ThemeContext state - inicializa com "default"
   const [currentTheme, setCurrentTheme] = useState<ThemeType>("default");
 
-  // Load theme from localStorage on startup
+  // Carrega o tema do localStorage apenas se não for a primeira visita
   useEffect(() => {
     if (typeof window !== "undefined") {
+      // Primeiro verifica se existe um tema salvo
       const savedTheme = localStorage.getItem("theme") as ThemeType;
-      if (savedTheme && savedTheme in themes) {
+
+      // Se não houver tema salvo ou se for a primeira visita, usa o tema default
+      if (!savedTheme) {
+        localStorage.setItem("theme", "default");
+      } else if (savedTheme in themes) {
+        // Se houver um tema salvo válido, usamos ele
         setCurrentTheme(savedTheme);
+      } else {
+        // Se o tema salvo não for válido, restaura para default
+        localStorage.setItem("theme", "default");
       }
     }
   }, []);
 
-  // Save theme to localStorage when it changes
+  // Salva o tema no localStorage quando ele muda
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("theme", currentTheme);

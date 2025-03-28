@@ -9,7 +9,6 @@ import { Search } from "lucide-react";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { buscarDigimonPorNome } from "../services/api";
 import { DigimonContext, ThemeContext } from "../contexts";
-import { themes } from "../styles/theme";
 import { Digimon } from "../types/types";
 
 // Animações
@@ -41,174 +40,153 @@ const PageContainer = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #7d4d8b; /* Roxo para o tema confiança */
+  background-color: ${({ theme }) => theme.colors.background};
+  background-image: ${({ theme }) =>
+    theme.images?.background ? `url(${theme.images.background})` : "none"};
+  background-size: cover;
+  background-position: center;
   position: relative;
-  overflow: hidden; /* Previne barra de rolagem */
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const Header = styled.header`
-  padding: 20px;
   position: relative;
-  z-index: 3;
-`;
-
-const ThemeTitle = styled.h3`
-  position: absolute;
-  top: 12px;
-  right: 174px; /* Alinhado com o primeiro tema */
-  color: #ffffff;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 100%;
-  letter-spacing: 0px;
-  width: 107px;
-  height: 12px;
-  z-index: 10;
+  z-index: 5;
+  padding: 12px 16px;
+  height: 60px;
+  display: flex;
+  align-items: center;
 `;
 
 const ContentContainer = styled.div`
-  flex-grow: 1;
+  flex: 1;
   display: flex;
   position: relative;
   padding: 0;
-  padding-left: 98px;
-  padding-right: 0;
-  max-width: 1920px;
-  margin: 0 auto;
   width: 100%;
-  height: auto;
   z-index: 2;
-
-  @media (max-width: 1366px) {
-    padding-left: 60px;
-  }
+  overflow: hidden;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    padding: 0 16px;
-    height: auto;
   }
 `;
 
 const LeftSection = styled.div`
-  width: 50%;
+  width: 40%;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
   z-index: 2;
   position: relative;
   animation: ${fadeIn} 0.8s ease;
-  max-width: 600px;
-  margin-left: 15px; /* Adicionado para mover o conteúdo mais para a direita */
+  padding-left: 88px;
+  padding-top: 40px;
+
+  @media (max-width: 1366px) {
+    padding-left: 60px;
+    width: 45%;
+  }
 
   @media (max-width: 768px) {
     width: 100%;
-    padding-top: 10px;
-    max-width: 100%;
-    margin-left: 0;
+    padding: 20px 16px;
   }
 `;
 
-// Imagem de fundo
-const Background = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("/assets/images/background-confianca.png");
-  background-size: cover;
-  background-position: center;
-  z-index: 1;
-`;
-
-// Character Image - Oculto no tema confiança, visível apenas no tema default
+// Character Image - Posicionamento específico conforme coordenadas exatas
 const CharacterImage = styled.div`
-  display: none;
+  position: absolute;
+  width: 647px;
+  height: 859px;
+  top: 169px;
+  left: 960px;
+  z-index: 1;
+  display: ${({ theme }) =>
+    theme.currentTheme === "default" ? "block" : "none"};
+  animation: ${float} 6s ease-in-out infinite;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
-// LogoContainer com altura variável dependendo do tema
+// LogoContainer ajustado com flexbox para alinhar verticalmente
 const LogoContainer = styled.div`
+  display: flex;
+  align-items: center; /* Alinha verticalmente no centro */
+  margin-bottom: 40px;
+  position: relative;
+`;
+
+// Logo principal ajustado
+const MainLogo = styled.div`
   position: relative;
   display: flex;
-  height: 250px;
-  margin-bottom: 30px;
+  align-items: center;
 `;
 
-// Logo principal
-const MainLogo = styled.div`
-  position: absolute;
-  top: 45px;
-  left: 33px;
-  width: 119px;
-  height: 217px;
-  z-index: 3;
-`;
-
-// Logo FPR para temas personalizados
-const FprLogo = styled.div`
-  display: block;
+// Logos separados para FPR e DIGIMON com posicionamento refinado
+const FPRLogo = styled.div`
   position: absolute;
   top: 126px;
-  left: 196px;
-  width: 128px;
-  height: 81px;
+  left: 166px; /* Ajustado para ficar mais próximo do logo */
 `;
 
-// Logo DIGIMON para temas personalizados
 const DigimonLogo = styled.div`
-  display: block;
   position: absolute;
   top: 193px;
-  left: 171px;
-  width: 197px;
-  height: 56px;
+  left: 151px; /* Ajustado para ficar mais próximo do logo */
 `;
 
-// Textos
+// Textos - Cor específica para cada tema
 const WelcomeText = styled.p`
-  color: #f8a12e;
+  color: ${({ theme }) => {
+    if (theme.currentTheme === "default") return "#f46d1b";
+    if (theme.currentTheme === "coragem") return "#FEC435";
+    if (theme.currentTheme === "amizade") return "#FFD05C";
+    if (theme.currentTheme === "luz") return "#FDF753";
+    if (theme.currentTheme === "amor") return "#FDF753";
+    if (theme.currentTheme === "sinceridade") return "#FDF753";
+    return "#F8A12E"; // Cor padrão para outros temas
+  }};
   font-family: "Poppins", sans-serif;
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 16px;
+  margin: 0 0 16px 0;
   animation: ${fadeIn} 0.8s ease 0.2s both;
-  margin-left: 10px; /* Adicionado para mover para a direita */
+  width: 327px;
+  height: 16px;
+  left: 2px;
 
   @media (max-width: 768px) {
     text-align: center;
-    margin-left: 0;
   }
 `;
 
 const MainTitle = styled.h1`
-  color: #ffffff;
+  color: ${({ theme }) =>
+    theme.currentTheme === "default" ? theme.colors.text : "#FFFFFF"};
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 64px;
-  line-height: 100%;
-  letter-spacing: 0px;
-  margin-bottom: 20px;
+  line-height: 1.1;
+  margin: 0 0 24px 0;
   animation: ${fadeIn} 0.8s ease 0.4s both;
   width: 498px;
   height: 146px;
-  position: relative;
-  margin-left: 10px; /* Adicionado para mover para a direita */
-  z-index: 2;
+  top: 19px;
 
   @media (max-width: 1366px) {
-    font-size: 40px;
-    width: auto;
-    height: auto;
+    font-size: 48px;
   }
 
   @media (max-width: 768px) {
-    font-size: 32px;
+    font-size: 36px;
     text-align: center;
-    width: auto;
-    height: auto;
-    margin-left: 0;
   }
 `;
 
@@ -217,59 +195,52 @@ const DescriptionText = styled.p`
     theme.currentTheme === "default" ? "#666666" : "#FFFFFF"};
   font-family: "Poppins", sans-serif;
   font-weight: 400;
-  font-size: 18px;
-  line-height: 120%;
-  letter-spacing: 0px;
-  vertical-align: middle;
-  margin-bottom: 30px;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 30px 0;
   width: 488px;
   height: 129px;
-  position: relative;
+  top: 159px;
+  left: 4px;
   animation: ${fadeIn} 0.8s ease 0.6s both;
 
   @media (max-width: 768px) {
     text-align: center;
-    margin: 0 auto 30px;
     width: auto;
-    height: auto;
-    top: auto;
-    left: auto;
   }
 `;
 
 const SearchForm = styled.form`
   position: relative;
   width: 100%;
-  max-width: 470px;
-  margin-bottom: 24px;
+  max-width: 494px;
+  margin: 0 0 24px 0;
   animation: ${fadeIn} 0.8s ease 0.8s both;
-  margin-left: 10px; /* Adicionado para mover para a direita */
   z-index: 2;
+  left: 2px;
 
   @media (max-width: 768px) {
     margin: 0 auto 24px;
   }
 `;
 
-// Barra de pesquisa com borda azul em temas personalizados
+// Barra de pesquisa atualizada para tema default com borda verde
 const SearchInputContainer = styled.div`
   display: flex;
   align-items: center;
   border-radius: 5px;
-  border: 1px solid #0580bb; /* Sempre azul */
-  background: #ffffff;
+  border: 1px solid
+    ${({ theme }) => (theme.currentTheme === "default" ? "#34AC40" : "#0580BB")};
+  background: #f5f5f5;
   padding: 8px 12px;
   position: relative;
   transition: all 0.3s ease;
-  width: ${({ theme }) =>
-    theme.currentTheme === "default" ? "auto" : "494px"};
-  height: ${({ theme }) =>
-    theme.currentTheme === "default" ? "auto" : "50px"};
-  left: ${({ theme }) => (theme.currentTheme === "default" ? "auto" : "2px")};
+  height: 50px;
+  width: 494px;
 
   &:focus-within {
-    box-shadow: 0 0 0 2px #0580bb40;
-    border-color: #0580bb;
+    box-shadow: 0 0 0 2px ${({ theme }) => `${theme.colors.primary}40`};
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
@@ -284,57 +255,81 @@ const SearchInput = styled.input`
   background: transparent;
 `;
 
-// Botão de busca com ícone azul em temas personalizados
+// Botão de pesquisa atualizado para o tema default com ícone verde
 const SearchButton = styled.button`
   background: none;
   border: none;
-  color: #0580bb; /* Sempre azul */
+  color: ${({ theme }) =>
+    theme.currentTheme === "default"
+      ? "#34AC40"
+      : theme.currentTheme === "sabedoria"
+      ? "#A50000"
+      : "#0580BB"};
   padding: 0;
   cursor: pointer;
   transition: transform 0.3s ease;
+  position: absolute;
+  top: 10px;
+  left: 455px;
+  width: 26px;
+  height: 26px;
 
   &:hover {
     transform: scale(1.1);
   }
 `;
 
+// Ajuste no ButtonsContainer para alinhar com a barra de pesquisa
 const ButtonsContainer = styled.div`
   display: flex;
+  justify-content: space-between; // Para alinhar às extremidades
   gap: 16px;
   margin-top: 16px;
   animation: ${fadeIn} 0.8s ease 1s both;
-  width: 100%; // Garantir largura total
-  max-width: 500px; // Alinhar com a barra de pesquisa
-  margin-left: 10px; /* Adicionado para mover para a direita */
+  width: 494px; // Mesma largura da barra de pesquisa
   z-index: 2;
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
-    margin-left: 0;
+    width: 100%;
   }
 `;
 
+// Botão "ESCOLHA SEU DIGIMON" atualizado para laranja no tema default
 const PrimaryButton = styled.button`
-  background-color: #f8a12e;
+  background-color: ${({ theme }) => {
+    if (theme.currentTheme === "default") return "#F46D1B";
+    if (theme.currentTheme === "coragem") return "#FEC435";
+    if (theme.currentTheme === "amizade") return "#FFD05C";
+    if (theme.currentTheme === "luz") return "#FDF753";
+    if (theme.currentTheme === "amor") return "#FDF753";
+    if (theme.currentTheme === "sinceridade") return "#FDF753";
+    return "#f8a12e"; // Cor padrão para outros temas
+  }};
   color: white;
-  border-radius: 25px;
+  border-radius: 30px;
   padding: 12px 20px;
   text-transform: uppercase;
   font-weight: bold;
+  font-size: 14px;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  flex: 1; // Distribui o espaço igualmente
+  width: 226px; // Largura exata conforme solicitado
+  height: 43px; // Altura exata conforme solicitado
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center; // Garante que o texto fique centralizado verticalmente
+  letter-spacing: 0.2px; // Espaçamento consistente entre letras
+  white-space: nowrap; // Evita quebra de linha
+  font-family: "Poppins", sans-serif; // Assegura a fonte consistente
 
   &:hover {
     opacity: 0.9;
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 
   @media (max-width: 768px) {
@@ -343,30 +338,42 @@ const PrimaryButton = styled.button`
   }
 `;
 
+// Botão "VER TODOS" atualizado para verde no tema default
 const SecondaryButton = styled(Link)`
-  display: inline-block;
-  background-color: #cbaade;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => {
+    if (theme.currentTheme === "default") return "#34AC40";
+    if (theme.currentTheme === "esperanca") return "#6BD476";
+    if (theme.currentTheme === "sabedoria") return "#6BD476";
+    if (theme.currentTheme === "confianca") return "#CBAADE";
+    if (theme.currentTheme === "coragem") return "#62B8DB";
+    if (theme.currentTheme === "amizade") return "#78D1F1";
+    if (theme.currentTheme === "luz") return "#CBAADE";
+    if (theme.currentTheme === "amor") return "#CBAADE";
+    if (theme.currentTheme === "sinceridade") return "#CBAADE";
+    return theme.colors.primary;
+  }};
   color: white;
   border-radius: 20px;
   padding: 12px 20px;
   text-transform: uppercase;
   font-weight: bold;
+  font-size: 14px;
   text-decoration: none;
   text-align: center;
   transition: all 0.3s ease;
-  flex: 1; // Distribui o espaço igualmente
-  width: 166px;
-  height: 43px;
-  position: relative;
+  width: 166px; // Largura exata conforme solicitado
+  height: 43px; // Altura exata conforme solicitado
+  letter-spacing: 0.2px; // Espaçamento consistente entre letras
+  white-space: nowrap; // Evita quebra de linha
+  font-family: "Poppins", sans-serif; // Assegura a fonte consistente
 
   &:hover {
     opacity: 0.9;
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 
   @media (max-width: 768px) {
@@ -378,8 +385,8 @@ const UserCircle = styled.div`
   position: absolute;
   width: 55px;
   height: 55px;
-  top: 24px;
-  left: 32px;
+  top: 12px;
+  left: 12px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -470,7 +477,7 @@ const ModalButton = styled.button`
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
-  flex: 1; // Distribui o espaço igualmente
+  flex: 1;
 
   &.confirm {
     background-color: ${({ theme }) => theme.colors.primary};
@@ -559,84 +566,129 @@ const Home: React.FC = () => {
     }
   };
 
-  // Não precisamos mais das funções de logo
+  // Determina a cor do ícone de pesquisa - atualizada para o tema default
+  const getSearchIconColor = () => {
+    if (currentTheme === "default") return "#34AC40";
+    if (currentTheme === "sabedoria") return "#A50000";
+    return "#0580BB";
+  };
 
   return (
     <PageContainer>
-      <Background />
       <Header>
-        <ThemeTitle>Escolha seu tema</ThemeTitle>
         <ThemeSwitcher />
       </Header>
 
-      {/* Ellipse única do Digimon selecionado */}
+      {/* Círculo do Digimon selecionado */}
       <UserCircle>
         {selectedDigimon ? (
           <Image
             src={selectedDigimon.img}
             alt={selectedDigimon.name}
-            width={60}
-            height={60}
+            width={45}
+            height={45}
             style={{ objectFit: "contain" }}
           />
         ) : (
           <Image
             src="/assets/images/desconhecido.png"
             alt="Desconhecido"
-            width={60}
-            height={60}
+            width={45}
+            height={45}
             style={{ objectFit: "contain" }}
           />
         )}
       </UserCircle>
 
+      {/* Imagem do personagem - Atualizada para o tema default */}
+      <CharacterImage>
+        <Image
+          src="/assets/images/Personagem.png"
+          alt="Digimon Characters"
+          fill
+          style={{
+            objectFit: "contain",
+            objectPosition: "center",
+          }}
+          priority
+        />
+      </CharacterImage>
+
       <ContentContainer>
         {/* Lado Esquerdo - Textos e busca */}
         <LeftSection>
-          {/* RENDERIZAÇÃO DOS LOGOS */}
+          {/* Logo - Atualizado para tema default */}
           <LogoContainer>
-            <MainLogo>
-              <Image
-                src="/assets/images/logo-branco.png"
-                alt="Logo"
-                width={119}
-                height={217}
-                priority
-              />
-            </MainLogo>
-            <FprLogo>
-              <Image
-                src="/assets/images/FPR-branco.png"
-                alt="FPR"
-                width={128}
-                height={81}
-                priority
-              />
-            </FprLogo>
-            <DigimonLogo>
-              <Image
-                src="/assets/images/DIGIMON-branco.png"
-                alt="DIGIMON"
-                width={197}
-                height={56}
-                priority
-              />
-            </DigimonLogo>
+            {currentTheme !== "default" ? (
+              <>
+                <MainLogo>
+                  <Image
+                    src="/assets/images/logo-branco.png"
+                    alt="FPR DIGIMON"
+                    width={119}
+                    height={217}
+                    priority
+                  />
+                </MainLogo>
+                <FPRLogo>
+                  <Image
+                    src="/assets/images/FPR-branco.png"
+                    alt="FPR"
+                    width={128}
+                    height={81}
+                    priority
+                  />
+                </FPRLogo>
+                <DigimonLogo>
+                  <Image
+                    src="/assets/images/DIGIMON-branco.png"
+                    alt="DIGIMON"
+                    width={197}
+                    height={56}
+                    priority
+                  />
+                </DigimonLogo>
+              </>
+            ) : (
+              <>
+                <MainLogo>
+                  <Image
+                    src="/assets/images/logo-laranja.png"
+                    alt="FPR DIGIMON"
+                    width={119}
+                    height={220}
+                    priority
+                  />
+                </MainLogo>
+                <FPRLogo>
+                  <Image
+                    src="/assets/images/FPR-laranja.png"
+                    alt="FPR"
+                    width={128}
+                    height={81}
+                    priority
+                  />
+                </FPRLogo>
+                <DigimonLogo>
+                  <Image
+                    src="/assets/images/DIGIMON-verde.png"
+                    alt="DIGIMON"
+                    width={197}
+                    height={56}
+                    priority
+                  />
+                </DigimonLogo>
+              </>
+            )}
           </LogoContainer>
 
           {/* Bem vindo */}
           <WelcomeText>Bem vindo ao FPR DIGIMON</WelcomeText>
 
-          {/* Título Principal dividido em duas linhas nos temas personalizados */}
+          {/* Título Principal */}
           <MainTitle>
-            {currentTheme === "default" ? (
-              "Escolha o seu Digimon"
-            ) : (
-              <>
-                Escolha o <br />
-                seu Digimon
-              </>
-            )}
+            Escolha o <br />
+            seu Digimon
           </MainTitle>
 
           {/* Texto Descritivo */}
@@ -647,7 +699,7 @@ const Home: React.FC = () => {
             quanto o mundo real.
           </DescriptionText>
 
-          {/* Barra de Pesquisa */}
+          {/* Barra de Pesquisa (sem o label PESQUISAR) */}
           <SearchForm onSubmit={handlePesquisa}>
             <SearchInputContainer>
               <SearchInput
@@ -662,12 +714,16 @@ const Home: React.FC = () => {
                 aria-label="search"
                 disabled={isSearching}
               >
-                <Search size={24} />
+                <Search
+                  size={26}
+                  color={getSearchIconColor()}
+                  strokeWidth={2}
+                />
               </SearchButton>
             </SearchInputContainer>
           </SearchForm>
 
-          {/* Botões */}
+          {/* Botões com tamanhos específicos */}
           <ButtonsContainer>
             <PrimaryButton onClick={handlePesquisa} disabled={isSearching}>
               {isSearching ? "BUSCANDO..." : "ESCOLHA SEU DIGIMON"}
@@ -676,12 +732,9 @@ const Home: React.FC = () => {
             <SecondaryButton href="/all">VER TODOS</SecondaryButton>
           </ButtonsContainer>
         </LeftSection>
-
-        {/* Não precisamos mais do personagem */}
-        <CharacterImage></CharacterImage>
       </ContentContainer>
 
-      {/* Modal de Confirmação Customizado */}
+      {/* Modal de Confirmação */}
       {showConfirmModal && searchResult && (
         <ModalOverlay onClick={() => setShowConfirmModal(false)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
